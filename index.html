@@ -244,6 +244,7 @@
             let new_interval_is_running = false;
             let pos = 0;
             let ready = false;
+            let rdo_1, rdo_2, rdo_3;
 
             btn.addEventListener("click", () => {
                 if (new_interval_is_running) return;
@@ -268,7 +269,7 @@
                         if (pos == caras_height * (caras_length / 2)) {
                             pos = 0;
                         } else {
-                            pos += 1;
+                            pos += 5;
                             tragamonedas_list_3.style.transform = `translateY(-${pos}px)`;
                         }
                     }, 1);
@@ -276,41 +277,46 @@
                     interval_2_is_running = true;
                     interval_3_is_running = true;
                 } else {
-                    btn.innerHTML = "Iniciar";
                     let new_interval = setInterval(() => {
                         new_interval_is_running = true;
                         let pos_1 = 100 * Math.floor(Math.random() * 3);
                         let pos_2 = 100 * Math.floor(Math.random() * 3);
                         let pos_3 = 100 * Math.floor(Math.random() * 3);
-                        if (pos == pos_1) {
+
+                        if (pos == pos_1 && interval_1_is_running) {
                             clearInterval(interval_list_1);
                             interval_1_is_running = false;
+                            rdo_1 = pos_1;
                         }
-                        if (pos == pos_2 && !interval_1_is_running) {
+                        if (pos == pos_2 && interval_2_is_running && !interval_1_is_running) {
                             clearInterval(interval_list_2);
                             interval_2_is_running = false;
+                            rdo_2 = pos_2;
                         }
-                        if (pos == pos_3 && !interval_1_is_running && !interval_2_is_running) {
+                        if (pos == pos_3 && interval_3_is_running && !interval_2_is_running) {
                             clearInterval(interval_list_3);
                             interval_3_is_running = false;
+                            rdo_3 = pos_3;
                         }
                         if (
                             !interval_1_is_running &&
                             !interval_2_is_running &&
                             !interval_3_is_running
                         ) {
-                            if (pos_1 == pos_2 && pos_2 == pos_3) {
-                                if (pos_1 == 0) {
+                            if (rdo_1 == rdo_2 && rdo_2 == rdo_3) {
+                                if (rdo_1 == 0) {
                                     alert("¡Ganaste el premio mayor!");
-                                } else if (pos_1 == 100) {
+                                } else if (rdo_1 == 100) {
                                     alert("¡Ganaste el premio medio!");
-                                } else {
+                                } else if (rdo_1 == 200) {
                                     alert("¡Ganaste el premio menor!");
                                 }
                             } else {
                                 alert("¡Perdiste!");
                             }
                             new_interval_is_running = false;
+                            btn.innerHTML = "Iniciar";
+                            rdo_1, rdo_2, rdo_3 = null;
                             clearInterval(new_interval);
                         }
                     }, 1);
