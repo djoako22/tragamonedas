@@ -21,24 +21,16 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                display: grid;
-                place-items: center;
+                display: flex;
+                height: var(--caras-width);
+                overflow: hidden;
+                border: 2px solid #000;
+                border-radius: 4px;
+                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
             }
             .tragamonedas_slider {
                 width: calc(var(--caras-width) * var(--caras-length));
-                border: 2px solid black;
-                border-radius: 4px;
-                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
                 overflow: hidden;
-            }
-            .tragamonedas_slider::after {
-                content: "▼";
-                position: absolute;
-                top: -4px;
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 20px;
-                color: black;
             }
             .tragamonedas_list {
                 display: flex;
@@ -48,7 +40,7 @@
             .cara {
                 line-height: var(--caras-width);
                 text-align: center;
-                border-right: 1px solid black;
+                outline: 1px solid black;
                 font-size: calc(var(--caras-width) * 0.5);
             }
             .elem {
@@ -66,7 +58,10 @@
 
             /* CSS */
             .button-82-pushable {
-                position: relative;
+                position: absolute;
+                top: 80%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 border: none;
                 background: transparent;
                 padding: 0;
@@ -76,7 +71,7 @@
                 user-select: none;
                 -webkit-user-select: none;
                 touch-action: manipulation;
-                margin: 20px;
+                /* margin-top: 20px; */
             }
 
             .button-82-shadow {
@@ -160,8 +155,8 @@
     </head>
     <body>
         <div class="tragamonedas">
-            <div class="tragamonedas_slider">
-                <div class="tragamonedas_list">
+            <div class="tragamonedas_slider_1">
+                <div class="tragamonedas_list_1">
                     <div class="cara">
                         <div class="elem">🥇</div>
                     </div>
@@ -182,49 +177,145 @@
                     </div>
                 </div>
             </div>
-            <button class="button-82-pushable" role="button">
-                <span class="button-82-shadow"></span>
-                <span class="button-82-edge"></span>
-                <span class="btn button-82-front text"> Iniciar </span>
-            </button>
+            <div class="tragamonedas_slider_2">
+                <div class="tragamonedas_list_2">
+                    <div class="cara">
+                        <div class="elem">🥇</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥈</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥉</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥇</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥈</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥉</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tragamonedas_slider_3">
+                <div class="tragamonedas_list_3">
+                    <div class="cara">
+                        <div class="elem">🥇</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥈</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥉</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥇</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥈</div>
+                    </div>
+                    <div class="cara">
+                        <div class="elem">🥉</div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <button class="button-82-pushable" role="button">
+            <span class="button-82-shadow"></span>
+            <span class="button-82-edge"></span>
+            <span class="btn button-82-front text"> Iniciar </span>
+        </button>
 
         <script>
             const tragamonedas = document.querySelector(".tragamonedas");
-            const tragamonedas_slider = document.querySelector(".tragamonedas_slider");
-            const tragamonedas_list = document.querySelector(".tragamonedas_list");
-            const caras_length = document.querySelectorAll(".cara").length;
-            const caras_width = tragamonedas_list.offsetWidth / caras_length;
+            const tragamonedas_list_1 = document.querySelector(".tragamonedas_list_1");
+            const tragamonedas_list_2 = document.querySelector(".tragamonedas_list_2");
+            const tragamonedas_list_3 = document.querySelector(".tragamonedas_list_3");
+            const caras_length = 6;
+            const caras_height = tragamonedas_list_1.offsetHeight / caras_length;
             const btn = document.querySelector(".btn");
 
+            let interval_list_1, interval_list_2, interval_list_3;
+            let interval_1_is_running = false;
+            let interval_2_is_running = false;
+            let interval_3_is_running = false;
+            let new_interval_is_running = false;
             let pos = 0;
             let ready = false;
-            let interval;
 
             btn.addEventListener("click", () => {
-                if (!ready) {
-                    ready = true;
+                if (new_interval_is_running) return;
+                ready = !ready;
+                if (ready) {
                     btn.innerHTML = "Detener";
-                    interval = setInterval(() => {
-                        if (pos == caras_width * caras_length) {
+                    interval_list_1 = setInterval(() => {
+                        if (pos == caras_height * (caras_length / 2)) {
                             pos = 0;
                         } else {
-                            pos += 5;
-                            tragamonedas_list.style.transform = `translateX(-${pos}px)`;
+                            pos += 1;
+                            tragamonedas_list_1.style.transform = `translateY(-${pos}px)`;
                         }
                     }, 1);
+                    interval_list_2 = setInterval(() => {
+                        if (pos == caras_height * (caras_length / 2)) {
+                            pos = 0;
+                        } else {
+                            pos += 1;
+                            tragamonedas_list_2.style.transform = `translateY(-${pos}px)`;
+                        }
+                    }, 1);
+                    interval_list_3 = setInterval(() => {
+                        if (pos == caras_height * (caras_length / 2)) {
+                            pos = 0;
+                        } else {
+                            pos += 1;
+                            tragamonedas_list_3.style.transform = `translateY(-${pos}px)`;
+                        }
+                    }, 1);
+                    interval_1_is_running = true;
+                    interval_2_is_running = true;
+                    interval_3_is_running = true;
                 } else {
-                    ready = false;
                     btn.innerHTML = "Iniciar";
-                    clearInterval(interval);
-
-                    if (150 < pos && pos <= 250) {
-                        alert("🥇 1er lugar!");
-                    } else if ((250 < pos && pos <= 300) || (0 < pos && pos <= 50)) {
-                        alert("🥈 2do lugar.");
-                    } else {
-                        alert("🥉 3er lugar :(");
-                    }
+                    let new_interval = setInterval(() => {
+                        new_interval_is_running = true;
+                        let pos_1 = 100 * Math.floor(Math.random() * 3);
+                        let pos_2 = 100 * Math.floor(Math.random() * 3);
+                        let pos_3 = 100 * Math.floor(Math.random() * 3);
+                        if (pos == pos_1) {
+                            clearInterval(interval_list_1);
+                            interval_1_is_running = false;
+                        }
+                        if (pos == pos_2 && !interval_1_is_running) {
+                            clearInterval(interval_list_2);
+                            interval_2_is_running = false;
+                        }
+                        if (pos == pos_3 && !interval_1_is_running && !interval_2_is_running) {
+                            clearInterval(interval_list_3);
+                            interval_3_is_running = false;
+                        }
+                        if (
+                            !interval_1_is_running &&
+                            !interval_2_is_running &&
+                            !interval_3_is_running
+                        ) {
+                            if (pos_1 == pos_2 && pos_2 == pos_3) {
+                                if (pos_1 == 0) {
+                                    alert("¡Ganaste el premio mayor!");
+                                } else if (pos_1 == 100) {
+                                    alert("¡Ganaste el premio medio!");
+                                } else {
+                                    alert("¡Ganaste el premio menor!");
+                                }
+                            } else {
+                                alert("¡Perdiste!");
+                            }
+                            new_interval_is_running = false;
+                            clearInterval(new_interval);
+                        }
+                    }, 1);
                 }
             });
         </script>
